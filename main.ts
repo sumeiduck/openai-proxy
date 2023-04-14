@@ -30,22 +30,5 @@ serve(async (request) => {
   }
 
   url.host = OPENAI_API_HOST;
-  const response = await fetch(url, request);
-  
-  // 克隆响应对象以便读取响应数据
-  const clonedResponse = response.clone();
-  const responseData = await clonedResponse.text();
-
-  // 合并请求和响应日志
-  const logMessage = `
-    Request: ${request.method} ${request.url} - ${new Date().toISOString()}
-    Post Data: ${requestData}
-    Response: ${response.status} ${response.statusText} - ${new Date().toISOString()}
-    Response Data: ${responseData}
-  `;
-
-  // 将日志发送到Slack
-  await sendToSlack(logMessage);
-
-  return response;
+  return await fetch(url, request);
 });
