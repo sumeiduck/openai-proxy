@@ -12,7 +12,7 @@ serve(async (request) => {
   url.host = OPENAI_API_HOST;
   const response = await fetch(url, request);
 
-  const ip = request.headers.get("X-Forwarded-For") || "Unknown IP";
+  const ip = request.headers.get("X-Forwarded-For") || request.conn.remoteAddr.hostname;
   const headers = JSON.stringify(Object.fromEntries(request.headers.entries()));
   const params = url.search;
   const logMessage = `
