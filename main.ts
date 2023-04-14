@@ -12,8 +12,9 @@ serve(async (request) => {
   url.host = OPENAI_API_HOST;
   const response = await fetch(url, request);
 
-  const ip = request.headers.get("X-Forwarded-For") || "Unknown IP";
-  const headers = JSON.stringify(Object.fromEntries(request.headers.entries()));
+  const ip = request.headers.get("X-Forwarded-For") || request.headers.get("x-real-ip") || "Unknown IP";
+  const headers = JSON.stringify(Object.fromEntries(request.headers.entries())
+    .map(([key, value]) => [key, key === "authorization" ? value.replace(/.(?=.{3})/g, "*") : value]));
   const params = url.search;
   const logMessage = `
     Request:
