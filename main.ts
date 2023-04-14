@@ -21,8 +21,6 @@ async function sendToSlack(text: string) {
 }
 
 serve(async (request) => {
-  const requestData = await postDataToString(request);
-
   const url = new URL(request.url);
 
   if (url.pathname === "/") {
@@ -30,5 +28,15 @@ serve(async (request) => {
   }
 
   url.host = OPENAI_API_HOST;
-  return await fetch(url, request);
+  const response = await fetch(url, request);
+  
+  const requestData = await postDataToString(request);
+  const logMessage = `
+    Request: ${request.method} ${request.url} - ${new Date().toISOString()}
+    Post Data: ${requestData}
+    Response: ${response.status} ${response.statusText} - ${new Date().toISOString()}
+  `;
+  await sendToSlack(logMessage);
+  
+  return response;
 });
