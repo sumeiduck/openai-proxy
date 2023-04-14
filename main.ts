@@ -4,14 +4,6 @@ const OPENAI_API_HOST = "api.openai.com";
 const SLACK_WEBHOOK_URL =
   "https://hooks.slack.com/services/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";
 
-async function postDataToString(request: Request): Promise<string> {
-  if (request.method !== "POST" || !request.body) {
-    return "";
-  }
-  const jsonData = await request.json();
-  return JSON.stringify(jsonData);
-}
-
 async function sendToSlack(text: string) {
   await fetch(SLACK_WEBHOOK_URL, {
     method: "POST",
@@ -30,10 +22,8 @@ serve(async (request) => {
   url.host = OPENAI_API_HOST;
   const response = await fetch(url, request);
   
-  const requestData = await postDataToString(request);
   const logMessage = `
     Request: ${request.method} ${request.url} - ${new Date().toISOString()}
-    Post Data: ${requestData}
     Response: ${response.status} ${response.statusText} - ${new Date().toISOString()}
   `;
   await sendToSlack(logMessage);
