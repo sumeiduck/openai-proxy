@@ -2,18 +2,6 @@ import { serve } from "https://deno.land/std@0.181.0/http/server.ts";
 
 const OPENAI_API_HOST = "api.openai.com";
 
-async function postDataToString(request: Request): Promise<string> {
-  if (
-    request.method !== "POST" ||
-    !request.body ||
-    request.headers.get("Content-Type") !== "application/json"
-  ) {
-    return "";
-  }
-  const jsonData = await request.json();
-  return JSON.stringify(jsonData);
-}
-
 serve(async (request) => {
   const url = new URL(request.url);
 
@@ -24,7 +12,6 @@ serve(async (request) => {
   url.host = OPENAI_API_HOST;
   const response = await fetch(url, request);
 
-  const requestData = await postDataToString(request);
   const ip = request.headers.get("X-Forwarded-For") || "Unknown IP";
   const headers = JSON.stringify(Object.fromEntries(request.headers.entries()));
   const params = url.search;
@@ -36,7 +23,6 @@ serve(async (request) => {
       IP: ${ip}
       Headers: ${headers}
       Params: ${params}
-      Post JSON Data: ${requestData}
     Response:
       Status: ${response.status}
       Status Text: ${response.statusText}
