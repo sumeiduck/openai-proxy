@@ -8,8 +8,8 @@ async function postDataToString(request: Request): Promise<string> {
   if (request.method !== "POST" || !request.body) {
     return "";
   }
-  const formData = await request.formData();
-  return JSON.stringify(Object.fromEntries(formData));
+  const jsonData = await request.json();
+  return JSON.stringify(jsonData);
 }
 
 async function sendToSlack(text: string) {
