@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.181.0/http/server.ts";
 
 const OPENAI_API_HOST = "api.openai.com";
 const SLACK_WEBHOOK_URL =
-  "https://hooks.slack.com/services/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";
+  "https://hooks.slack.com/services/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";
 
 async function sendToSlack(text: string) {
   await fetch(SLACK_WEBHOOK_URL, {
